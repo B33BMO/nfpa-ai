@@ -1,6 +1,97 @@
 @import "tailwindcss";
 
-
+/* Base */
 :root { color-scheme: dark; }
 html, body { height: 100%; }
-body { @apply bg-neutral-950 text-neutral-200; }
+body {
+  /* deep space base; text color handled by components */
+  color: #e5e7eb;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* -------- Destiny-ish HUD cosmetics -------- */
+
+/* Subtle square grid */
+.hud-grid {
+  background-image:
+    linear-gradient(to right, rgba(148,163,184,.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148,163,184,.1) 1px, transparent 1px);
+  background-size: 28px 28px, 28px 28px;
+  mask-image: radial-gradient(80% 80% at 50% 40%, black, transparent);
+}
+
+/* Vignette / edge darkening */
+.vignette {
+  background: radial-gradient(120% 90% at 50% 10%, rgba(0,0,0,0) 0%, rgba(0,0,0,.6) 70%);
+  pointer-events: none;
+}
+
+/* Faint CRT-like scanlines */
+.scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.025) 0px,
+    rgba(255,255,255,0.025) 2px,
+    transparent 3px,
+    transparent 4px
+  );
+  pointer-events: none;
+}
+
+/* Starfield (two layers drifting) */
+.starfield, .starfield::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.7) 50%, transparent 51%),
+    radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,.6) 50%, transparent 51%),
+    radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,.8) 50%, transparent 51%),
+    radial-gradient(1px 1px at 85% 60%, rgba(255,255,255,.6) 50%, transparent 51%),
+    radial-gradient(2px 2px at 40% 40%, rgba(255,255,255,.25) 50%, transparent 51%),
+    radial-gradient(2px 2px at 65% 75%, rgba(255,255,255,.2) 50%, transparent 51%);
+  animation: drift 140s linear infinite;
+}
+.starfield::after {
+  opacity: .6;
+  transform: scale(1.2);
+  animation-duration: 220s;
+}
+
+@keyframes drift {
+  from { transform: translateY(0px); }
+  to   { transform: translateY(-800px); }
+}
+
+/* Glassy card chrome + glowing corners */
+.hud-card {
+  position: relative;
+  overflow: hidden;
+}
+.hud-corners::before,
+.hud-corners::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background:
+    conic-gradient(from 0deg at 0% 0%, rgba(56,189,248,.35), transparent 25%) top left/40px 40px no-repeat,
+    conic-gradient(from 90deg at 100% 0%, rgba(99,102,241,.35), transparent 25%) top right/40px 40px no-repeat,
+    conic-gradient(from 180deg at 100% 100%, rgba(56,189,248,.35), transparent 25%) bottom right/40px 40px no-repeat,
+    conic-gradient(from 270deg at 0% 100%, rgba(99,102,241,.35), transparent 25%) bottom left/40px 40px no-repeat;
+  pointer-events: none;
+  opacity: .35;
+  filter: blur(0.2px);
+}
+
+/* HUD input subtle inner glow */
+.hud-input {
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    0 10px 30px rgba(2,6,23,0.6);
+}
+
+/* Slower spin for “Ghost” */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.animate-spin-slow { animation: spin-slow 2.4s linear infinite; }
